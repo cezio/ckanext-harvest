@@ -136,3 +136,19 @@ class IHarvester(Interface):
         :returns: True if the action was done, "unchanged" if the object didn't
                   need harvesting after all or False if there were errors.
         '''
+
+
+class IHarvestPostprocessor(Interface):
+    '''
+    This allows to do postprocessing harvested data from 3rd party code without
+    modification of original harvester.
+
+    '''
+
+    def after_gather(self, harvest_object):
+        '''
+        Processes objects processed by harvester
+
+        :param harvest_object: HarvestObject object after gather phase
+        :returns: None
+        '''

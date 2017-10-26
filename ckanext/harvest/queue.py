@@ -351,6 +351,13 @@ def gather_stage(harvester, job):
 
     try:
         harvest_object_ids = harvester.gather_stage(job)
+
+        # allow postprocessing of gathered data by 3rdparties
+        for harvest_object_id in harvest_object_ids:
+            harvest_object = HarvestObject.get(harvest_object_id)
+            for harvest_postproc in PluginImplementations(IHarvestPostprocessing):
+                harvest_postproc.after_gather(harvest_obj)
+
     except (Exception, KeyboardInterrupt):
         harvest_objects = model.Session.query(HarvestObject).filter_by(
             harvest_job_id=job.id
